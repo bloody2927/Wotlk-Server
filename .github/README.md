@@ -1,92 +1,148 @@
-# ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
+Wotlk-Server (AzerothCore Fork) – Module-first
+Personal fork of AzerothCore focused on creating custom modules (Raids, Instances, RP features).
+This fork is for educational and training purposes during my apprenticeship as an IT Specialist for System Integration.
 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
-[![CodeFactor](https://www.codefactor.io/repository/github/azerothcore/azerothcore-wotlk/badge)](https://www.codefactor.io/repository/github/azerothcore/azerothcore-wotlk)
-[![StackOverflow](http://img.shields.io/badge/stackoverflow-azerothcore-blue.svg?logo=stackoverflow)](https://stackoverflow.com/questions/tagged/azerothcore?sort=newest "Ask / browse questions here")
-[![Discord](https://img.shields.io/discord/217589275766685707?logo=discord&logoColor=white)](https://discord.gg/gkt4y2x "Our community hub on Discord")
+Goals of this Fork
 
-## Build Status
+Module-first: New content (NPCs, Items, Quests, Events, Raids/Instances, RP systems) will not be merged directly into the core but developed as standalone modules.
 
-[![nopch-build](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/core-build-nopch.yml/badge.svg?branch=master)](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/core-build-nopch.yml?query=branch%3Amaster)
-[![pch-build](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/core-build-pch.yml/badge.svg?branch=master)](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/core-build-pch.yml?query=branch%3Amaster)
-[![core-modules-build](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/core_modules_build.yml/badge.svg?branch=master)](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/core_modules_build.yml?query=branch%3Amaster)
-[![windows-build](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/windows_build.yml/badge.svg?branch=master)](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/windows_build.yml?query=branch%3Amaster)
-[![macos-build](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/macos_build.yml/badge.svg?branch=master)](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/macos_build.yml?query=branch%3Amaster)
-[![docker-build](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/docker_build.yml/badge.svg?branch=master)](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/docker_build.yml?query=branch%3Amaster)
-[![tools-build](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/tools_build.yml/badge.svg?branch=master)](https://github.com/azerothcore/azerothcore-wotlk/actions/workflows/tools_build.yml?query=branch%3Amaster)
+Clean Core: Keep the core as close to upstream AzerothCore as possible to make merging updates easy.
 
-## Introduction
+Learning Project: Building, maintaining, and extending a WoW 3.3.5a server as part of my apprenticeship (starting 08/2025). Focus: Build/CI, C++ scripting, SQL, structure & server operation.
 
-AzerothCore is an open-source game server application and framework designed for hosting massively multiplayer online role-playing games (MMORPGs). It is based on the popular MMORPG World of Warcraft (WoW) and seeks to recreate the gameplay experience of the original game from patch 3.3.5a.
+Repository Overview
+Wotlk-Server/
+├─ modules/ # all active modules (submodules or direct code)
+│ ├─ mod-individual-progression/
+│ ├─ mod-autobalance/
+│ ├─ mod-transmog/
+│ ├─ mod-account-achievements/
+│ ├─ mod-npc-enchanter/ # example
+│ └─ mod-... # own content (Raids/Instances/RP)
+├─ src/server/scripts/ # Core scripts (keep unchanged if possible)
+├─ data/sql/custom/ # only minor SQL adjustments; main content in modules
+├─ conf/dist/ # sample configs (no passwords)
+└─ README.md
 
-The original code is based on MaNGOS, TrinityCore, and SunwellCore and has since then had extensive development to improve stability, in-game mechanics, and modularity to the game. AC has also grown into a community-driven project with a significant number of contributors and developers. It is written in C++ and provides a solid foundation for creating private servers that mimic the mechanics and behavior of the official WoW servers.
+Note: Build artifacts, real passwords, and private data are excluded via .gitignore.
 
-## Philosophy
+Roadmap (Excerpt)
+Raids / Instances as Modules
 
-Our main goal is to create a playable game server, offering a fully working in-game experience.
+Halion clone & CoA portals as standalone module
 
-Here are the main points we focus on:
+Phase / progression control per instance
 
-* Stability
-  * We make sure all changes pass the CIs before being merged into the master branch.
+RP Modules
 
-* Blizzlike content
-  * We strive to make all in-game content to be blizzlike. Therefore we have a high standard for fixes being made.
+Portal & travel systems, social features, guild QoL
 
-* Customization
-  * It is easy to customize your experience using [modules](#modules).
+Global Server Progression
 
-* Community driven
-  * AzerothCore has an active community of developers, contributors, and users who collaborate, share knowledge, and provide support through forums, Discord channels, and other communication platforms. 
+WotLK Phases P1 → P4 switchable via SQL/config
 
-### Modules
+Tools & Quality
 
-AzerothCore is designed to be highly modular, allowing developers to extend and customize the game to suit their preferences or create unique gameplay experiences. This flexibility enables the addition of custom features, content, and modifications.
+Consistent module structure, clear SQL migration paths
 
-We have a lot of modules already made by the community, many of which can be found in the [Module Catalogue](https://www.azerothcore.org/catalogue.html#/).
+(Optional) simple CI for module builds
 
-## Installation
+Creating Modules (Guidelines)
+Name scheme: modules/mod-<short-purpose>/
 
-Detailed installation instructions are available [here](http://www.azerothcore.org/wiki/installation).
+Minimal structure:
+modules/mod-example/
+├─ CMakeLists.txt
+├─ README.md
+├─ conf/mod-example.conf.dist
+├─ sql/
+│ ├─ world/ # world changes
+│ ├─ auth/ # auth changes (rare)
+│ └─ characters/
+└─ src/
+└─ ModExample.cpp # RegisterModule(), hooks, scripts
 
-## Contributing
+C++ skeleton example:
+#include "ScriptMgr.h"
+#include "Chat.h"
 
-AzerothCore can also serve as a learning resource for aspiring developers who want to understand how WoW servers work, how MMORPGs are structured, how game server emulators are created, or to improve their C++ and SQL knowledge.
+class ModExample : public ModuleScript
+{
+public:
+ModExample() : ModuleScript("mod-example") {}
 
-If you want to contribute to the project, you will find a lot of resources that will guide you in our [wiki](https://www.azerothcore.org/wiki/contribute).
+cpp
+Kopieren
+Bearbeiten
+void OnAfterConfigLoad(bool /*reload*/) override  
+{  
+    // Load/check config  
+}  
+};
 
-We also recommend you read our [Contributor Covenant Code of Conduct](https://github.com/azerothcore/azerothcore-wotlk/blob/master/.github/CODE_OF_CONDUCT.md).
+void Addmod_exampleScripts()
+{
+new ModExample();
+}
 
-Feel free to join our [Discord server](https://discord.gg/gkt4y2x).
+CMake (inside module):
+ac_add_module(mod-example
+SOURCES
+src/ModExample.cpp
+)
 
-Click on the "⭐ Star" button to help us gain more visibility on Github!
+SQL migrations:
 
-## Authors & Contributors
+Each change as a separate file with date prefix (e.g. 2025_08_01_00_world_init.sql)
 
-The project was born in 2016 based on SunwellCore. Unfortunately, SunwellCore was published without any git history, so on git there are no credits for all the contributors before 2016.
+Only create/alter module-specific tables/entries
 
-You can check the [authors](https://github.com/azerothcore/azerothcore-wotlk/blob/master/AUTHORS) file for more details.
+Quick Start (Windows)
 
-## Important Links
+Requirements: Visual Studio, Git, CMake, MySQL, OpenSSL, Boost
 
-- [Doxygen documentation](https://www.azerothcore.org/pages/doxygen/index.html)
-- [Website](http://www.azerothcore.org/)
-- [AzerothCore catalogue](http://www.azerothcore.org/catalogue.html  "Modules, tools, and other stuff for AzerothCore") (modules, tools, etc...)
-- [Our Discord server](https://discord.gg/gkt4y2x)
-- [Our wiki](http://www.azerothcore.org/wiki "Easy to use and developed by AzerothCore founder")
-- [Our forum](https://github.com/azerothcore/azerothcore-wotlk/discussions/)
-- [Our Facebook page](https://www.facebook.com/AzerothCore/)
-- [Our LinkedIn page](https://www.linkedin.com/company/azerothcore/)
+Clone repository:
+git clone https://github.com/bloody2927/Wotlk-Server.git
 
-## License
+Place/activate modules in modules/
 
-- The new AzerothCore source components are released under the [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.en.html)
-- The old sources based on MaNGOS/TrinityCore are released under the [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+Create build folder & configure CMake:
+mkdir build && cd build
+cmake .. -A x64 -DCMAKE_BUILD_TYPE=RelWithDebInfo
+cmake --build . --config RelWithDebInfo -j
 
-It's important to note that AzerothCore is not an official Blizzard Entertainment product, and it is not affiliated with or endorsed by World of Warcraft or Blizzard Entertainment. AzerothCore does not in any case sponsor nor support illegal public servers. If you use this project to run an illegal public server and not for testing and learning it is your own personal choice.
+Import DB (AzerothCore standard) + apply module SQLs
 
-## Special thanks
+Copy and adjust worldserver.conf/authserver.conf from conf/dist
 
-[JetBrains](https://www.jetbrains.com/?from=AzerothCore) is providing free [open-source licenses](https://www.jetbrains.com/community/opensource/) to the AzerothCore developers.
+Note: .gitignore hides real *.conf with passwords
 
-[![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
+Keeping Upstream Updated
+git remote add upstream https://github.com/azerothcore/azerothcore-wotlk.git
+git fetch upstream
+git checkout main
+git merge upstream/master # or rebase if preferred
+git push
+
+Develop your own changes preferably in feature branches and merge them via PR into your fork.
+
+Contributions / Issues
+This repo is primarily for my learning/training project.
+Feedback and suggestions are welcome (via Issue), PRs after discussion.
+For contributing to the main project, please follow AzerothCore Contributing Guides.
+
+License & Credits
+
+Core is licensed under GNU AGPL v3
+
+Parts based on MaNGOS/Trinity/Sunwell are under GNU GPL v2
+
+See LICENSE and the original repo for full details
+Credits: All recognition to the AzerothCore team and community
+This fork is not supported by Blizzard. Use at your own risk.
+
+Contact
+
+Discord (AzerothCore Community): https://discord.gg/gkt4y2x
+
+Fork owner: bloody2927 – usage for educational/training purposes (IT Specialist System Integration)
