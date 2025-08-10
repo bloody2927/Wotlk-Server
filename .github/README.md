@@ -8,7 +8,7 @@ Module-first: New content (NPCs, Items, Quests, Events, Raids/Instances, RP syst
 
 Clean Core: Keep the core as close to upstream AzerothCore as possible to make merging updates easy.
 
-Learning Project: Building, maintaining, and extending a WoW 3.3.5a server as part of my apprenticeship (starting 08/2025). Focus: Build/CI, C++ scripting, SQL, structure & server operation.
+Learning Project: Building, maintaining, and extending a WoW 3.3.5a server as part of my apprenticeship. Focus: Build/CI, C++ scripting, SQL, structure & server operation.
 
 Repository Overview
 Wotlk-Server/
